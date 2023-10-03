@@ -14,21 +14,21 @@ namespace UDBA
     {
         #region Private fields
 
-        private readonly static DataTable FactoriesTable = DbProviderFactories.GetFactoryClasses();
+        private readonly DataTable FactoriesTable = DbProviderFactories.GetFactoryClasses();
 
         #endregion
 
         #region Internals fields
 
-        internal static IDbConnection dbConnection;
-        internal static IDbTransaction dbTransaction;
-        internal static DbProviderFactory _Factory;
+        internal IDbConnection dbConnection;
+        internal IDbTransaction dbTransaction;
+        internal DbProviderFactory _Factory;
 
         #endregion
 
         #region Properties
 
-        public static IDbConnection GetConnection
+        public IDbConnection GetConnection
         {
             get
             {
@@ -45,7 +45,7 @@ namespace UDBA
         /// </summary>
         /// <param name="ConnectionStringSetting"></param>
         /// <returns></returns>
-        private static DbProviderFactory GetFactory(ConnectionStringSettings ConnectionStringSetting)
+        private DbProviderFactory GetFactory(ConnectionStringSettings ConnectionStringSetting)
         {
             foreach (DataRow row in FactoriesTable.Rows)
             {
@@ -63,7 +63,7 @@ namespace UDBA
         /// <param name="sql">The command text.</param>
         /// <param name="parameters">Parameters list for the query.</param>
         /// <returns></returns>
-        private static IDbCommand CreateCommand(string sql, List<DbParameter> parameters = null, CommandType commandType = CommandType.Text)
+        private IDbCommand CreateCommand(string sql, List<DbParameter> parameters = null, CommandType commandType = CommandType.Text)
         {
             IDbCommand cmd = dbConnection.CreateCommand();
             cmd.CommandText = sql;
@@ -93,7 +93,7 @@ namespace UDBA
         /// <param name="name">Parameter's name.</param>
         /// <param name="value">Parameter's value.</param>
         /// <returns></returns>
-        public static DbParameter CreateParameter(string name, object value)
+        public DbParameter CreateParameter(string name, object value)
         {
             DbParameter parameter = _Factory.CreateParameter();
             parameter.Value = value;
@@ -106,7 +106,7 @@ namespace UDBA
         /// </summary>
         /// <param name="ConnectionStringSetting">Connection string to open the connection to the database.</param>
         /// <returns></returns>
-        public static void CreateDbConnection(ConnectionStringSettings ConnectionStringSetting)
+        public void CreateDbConnection(ConnectionStringSettings ConnectionStringSetting)
         {
             DbProviderFactory Factory = GetFactory(ConnectionStringSetting);
             if ((Factory != null))
@@ -126,7 +126,7 @@ namespace UDBA
         /// <summary>
         /// Open the database connection
         /// </summary>
-        public static void OpenDatabase()
+        public void OpenDatabase()
         {
             try
             {
@@ -141,7 +141,7 @@ namespace UDBA
         /// <summary>
         /// Close the database connection
         /// </summary>
-        public static void CloseDatabase()
+        public void CloseDatabase()
         {
             try
             {
@@ -161,7 +161,7 @@ namespace UDBA
         /// <summary>
         /// Start a transaction
         /// </summary>
-        public static void BeginTransaction()
+        public void BeginTransaction()
         {
             dbTransaction = dbConnection.BeginTransaction();
         }
@@ -169,7 +169,7 @@ namespace UDBA
         /// <summary>
         /// Rollback a transaction
         /// </summary>
-        public static void RollbackTransaction()
+        public void RollbackTransaction()
         {
             if (dbTransaction != null)
             {
@@ -182,7 +182,7 @@ namespace UDBA
         /// <summary>
         /// Commit a transaction
         /// </summary>
-        public static void CommitTransaction()
+        public void CommitTransaction()
         {
             if (dbTransaction != null)
             {
@@ -202,7 +202,7 @@ namespace UDBA
         /// <param name="sql">The command text.</param>
         /// <param name="parameters">Parameters list for the query.</param>
         /// <returns></returns>
-        public static int ExecuteNonQuery(string sql, List<DbParameter> parameters = null)
+        public int ExecuteNonQuery(string sql, List<DbParameter> parameters = null)
         {
             IDbCommand cmd = CreateCommand(sql, parameters);
 
@@ -215,7 +215,7 @@ namespace UDBA
         /// <param name="sql">The command text.</param>
         /// <param name="parameters">Parameters list for the query.</param>
         /// <returns></returns>
-        public static T ExecuteScalar<T>(string sql, List<DbParameter> parameters = null)
+        public T ExecuteScalar<T>(string sql, List<DbParameter> parameters = null)
         {
             IDbCommand cmd = CreateCommand(sql, parameters);
 
@@ -228,7 +228,7 @@ namespace UDBA
         /// <typeparam name="T"></typeparam>
         /// <param name="Command"></param>
         /// <returns></returns>
-        private static T ExecuteScalar<T>(IDbCommand Command)
+        private T ExecuteScalar<T>(IDbCommand Command)
         {
             if (Command == null) { throw new ArgumentNullException("Command is null"); }
 
@@ -272,7 +272,7 @@ namespace UDBA
         /// <param name="commandType">Type of the command.</param>
         /// <returns>A DbDataReader.</returns>
         /// <url>https://csharp-extension.com/en/method/1002758/dbconnection-executereader</url>
-        public static DbDataReader ExecuteReader(string sql, List<DbParameter> parameters = null, CommandType commandType = CommandType.Text)
+        public DbDataReader ExecuteReader(string sql, List<DbParameter> parameters = null, CommandType commandType = CommandType.Text)
         {
             using (IDbCommand command = CreateCommand(sql, parameters, commandType))
             {
@@ -291,7 +291,7 @@ namespace UDBA
         /// <param name="parameters">Parameters list for the query.</param>
         /// <param name="commandType">Type of the command.</param>
         /// <returns></returns>
-        public static DataTable GetDataTable(string sql, List<DbParameter> parameters = null, CommandType commandType = CommandType.Text)
+        public DataTable GetDataTable(string sql, List<DbParameter> parameters = null, CommandType commandType = CommandType.Text)
         {
             DataTable dataTable = new DataTable();
             IDbCommand command = CreateCommand(sql, parameters, commandType);

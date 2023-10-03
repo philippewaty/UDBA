@@ -20,16 +20,18 @@ namespace Test
         };
 
         private static string sqlParameterFormat;
+        private static DatabaseAccess myDB;
 
         static void Main(string[] args)
         {
+            myDB = new DatabaseAccess();
             DataBaseType dataBaseType = DataBaseType.SQLite;
             ConnectionStringSettings connectionStringSettings = GetConnectionStringSettings(dataBaseType);
             initSQLParameter(dataBaseType);
 
             try
             {
-                DatabaseAccess.CreateDbConnection(connectionStringSettings);
+                myDB.CreateDbConnection(connectionStringSettings);
             }
             catch (Exception ex)
             {
@@ -38,32 +40,32 @@ namespace Test
                 Console.ReadKey();
                 Environment.Exit(0);
             }
-            DatabaseAccess.OpenDatabase();
+            myDB.OpenDatabase();
             if (dataBaseType == DataBaseType.SQLite)
             {
-                DatabaseAccess.BeginTransaction();
+                myDB.BeginTransaction();
                 CreateDatabaseSQLite();
-                DatabaseAccess.CommitTransaction();
+                myDB.CommitTransaction();
             }
             if (dataBaseType == DataBaseType.MSSQL)
             {
-                DatabaseAccess.BeginTransaction();
+                myDB.BeginTransaction();
                 CreateDatabaseMSSQL();
-                DatabaseAccess.CommitTransaction();
+                myDB.CommitTransaction();
             }
             if (dataBaseType == DataBaseType.Oracle)
             {
-                DatabaseAccess.BeginTransaction();
+                myDB.BeginTransaction();
                 CreateDatabaseOracle();
-                DatabaseAccess.CommitTransaction();
+                myDB.CommitTransaction();
             }
 
-            int nb = DatabaseAccess.ExecuteScalar<int>("SELECT COUNT(*) FROM CONTACTS");
+            int nb = myDB.ExecuteScalar<int>("SELECT COUNT(*) FROM CONTACTS");
             Console.WriteLine($"nb lines in contacts : {nb}");
 
             Console.WriteLine();
             Console.WriteLine("Tous les contacts");
-            DbDataReader reader = DatabaseAccess.ExecuteReader("SELECT * FROM CONTACTS");
+            DbDataReader reader = myDB.ExecuteReader("SELECT * FROM CONTACTS");
             while (reader.Read())
             {
                 Console.WriteLine($"Id={reader.Get<int>("Id", 0)}, Name={reader.Get<string>("Name")}, FirstName={reader.Get<string>("FirstName")}, Actif={reader.Get<bool>("Actif")}");
@@ -76,10 +78,10 @@ namespace Test
             Console.WriteLine("Tous les contacts qui ont pour prénom John et qui sont actifs");
             List<DbParameter> parameters = new List<DbParameter>
             {
-                DatabaseAccess.CreateParameter($"{sqlParameterFormat}FirstName", "John"),
-                DatabaseAccess.CreateParameter($"{sqlParameterFormat}Actif", 1)
+                myDB.CreateParameter($"{sqlParameterFormat}FirstName", "John"),
+                myDB.CreateParameter($"{sqlParameterFormat}Actif", 1)
             };
-            reader = DatabaseAccess.ExecuteReader($"SELECT * FROM CONTACTS WHERE FirstName = {sqlParameterFormat}FirstName AND Actif = {sqlParameterFormat}Actif", parameters);
+            reader = myDB.ExecuteReader($"SELECT * FROM CONTACTS WHERE FirstName = {sqlParameterFormat}FirstName AND Actif = {sqlParameterFormat}Actif", parameters);
             while (reader.Read())
             {
                 Console.WriteLine($"Id={reader.Get<int>("Id", 0)}, Name={reader.Get<string>("Name")}, Actif={reader.Get<bool>("Actif")}");
@@ -90,10 +92,10 @@ namespace Test
             Console.WriteLine("Datatable");
             parameters = new List<DbParameter>
             {
-                DatabaseAccess.CreateParameter($"{sqlParameterFormat}FirstName", "John"),
-                DatabaseAccess.CreateParameter($"{sqlParameterFormat}Actif", 1)
+                myDB.CreateParameter($"{sqlParameterFormat}FirstName", "John"),
+                myDB.CreateParameter($"{sqlParameterFormat}Actif", 1)
             };
-            DataTable dataTable = DatabaseAccess.GetDataTable($"SELECT * FROM CONTACTS WHERE FirstName = {sqlParameterFormat}FirstName AND Actif = {sqlParameterFormat}Actif", parameters);
+            DataTable dataTable = myDB.GetDataTable($"SELECT * FROM CONTACTS WHERE FirstName = {sqlParameterFormat}FirstName AND Actif = {sqlParameterFormat}Actif", parameters);
             foreach (DataRow row in dataTable.Rows)
             {
                 Console.WriteLine($"Id={row["Id"]}, Name={row["Name"]}, Actif={row["Actif"]}");
@@ -101,9 +103,9 @@ namespace Test
 
             if (dataBaseType != DataBaseType.SQLite)
             {
-                DatabaseAccess.ExecuteNonQuery("DROP TABLE CONTACTS");
+                myDB.ExecuteNonQuery("DROP TABLE CONTACTS");
             }
-            DatabaseAccess.CloseDatabase();
+            myDB.CloseDatabase();
 
             Console.ReadKey();
         }
@@ -159,22 +161,22 @@ namespace Test
             List<DbParameter> parameters = new List<DbParameter>();
             //*** Create table and data
             string sql = "CREATE TABLE CONTACTS (ID int, NAME char(50), FIRSTNAME char(50), ACTIF BOOLEAN)";
-            DatabaseAccess.ExecuteNonQuery(sql);
+            myDB.ExecuteNonQuery(sql);
 
             sql = "INSERT INTO CONTACTS (ID, NAME, FIRSTNAME, ACTIF) VALUES (@Id, @Name, @FirstName, @Actif)";
 
-            parameters.Add(DatabaseAccess.CreateParameter("@Id", 1));
-            parameters.Add(DatabaseAccess.CreateParameter("@Name", "Wayne"));
-            parameters.Add(DatabaseAccess.CreateParameter("@FirstName", "John"));
-            parameters.Add(DatabaseAccess.CreateParameter("@Actif", 0));
-            DatabaseAccess.ExecuteNonQuery(sql, parameters);
+            parameters.Add(myDB.CreateParameter("@Id", 1));
+            parameters.Add(myDB.CreateParameter("@Name", "Wayne"));
+            parameters.Add(myDB.CreateParameter("@FirstName", "John"));
+            parameters.Add(myDB.CreateParameter("@Actif", 0));
+            myDB.ExecuteNonQuery(sql, parameters);
 
             parameters.Clear();
-            parameters.Add(DatabaseAccess.CreateParameter("@Id", 2));
-            parameters.Add(DatabaseAccess.CreateParameter("@Name", "Doe"));
-            parameters.Add(DatabaseAccess.CreateParameter("@FirstName", "John"));
-            parameters.Add(DatabaseAccess.CreateParameter("@Actif", 1));
-            DatabaseAccess.ExecuteNonQuery(sql, parameters);
+            parameters.Add(myDB.CreateParameter("@Id", 2));
+            parameters.Add(myDB.CreateParameter("@Name", "Doe"));
+            parameters.Add(myDB.CreateParameter("@FirstName", "John"));
+            parameters.Add(myDB.CreateParameter("@Actif", 1));
+            myDB.ExecuteNonQuery(sql, parameters);
         }
 
         private static void CreateDatabaseMSSQL()
@@ -182,46 +184,46 @@ namespace Test
             List<DbParameter> parameters = new List<DbParameter>();
             //*** Create table and data
             string sql = "CREATE TABLE CONTACTS (ID int, NAME varchar(50), FIRSTNAME varchar(50), ACTIF int)";
-            DatabaseAccess.ExecuteNonQuery(sql);
+            myDB.ExecuteNonQuery(sql);
 
             sql = "INSERT INTO CONTACTS (ID, NAME, FIRSTNAME, ACTIF) VALUES (@Id, @Name, @FirstName, @Actif)";
 
-            parameters.Add(DatabaseAccess.CreateParameter("@Id", 1));
-            parameters.Add(DatabaseAccess.CreateParameter("@Name", "Wayne"));
-            parameters.Add(DatabaseAccess.CreateParameter("@FirstName", "John"));
-            parameters.Add(DatabaseAccess.CreateParameter("@Actif", 0));
-            DatabaseAccess.ExecuteNonQuery(sql, parameters);
+            parameters.Add(myDB.CreateParameter("@Id", 1));
+            parameters.Add(myDB.CreateParameter("@Name", "Wayne"));
+            parameters.Add(myDB.CreateParameter("@FirstName", "John"));
+            parameters.Add(myDB.CreateParameter("@Actif", 0));
+            myDB.ExecuteNonQuery(sql, parameters);
 
             parameters.Clear();
-            parameters.Add(DatabaseAccess.CreateParameter("@Id", 2));
-            parameters.Add(DatabaseAccess.CreateParameter("@Name", "Doe"));
-            parameters.Add(DatabaseAccess.CreateParameter("@FirstName", "John"));
-            parameters.Add(DatabaseAccess.CreateParameter("@Actif", 1));
-            DatabaseAccess.ExecuteNonQuery(sql, parameters);
+            parameters.Add(myDB.CreateParameter("@Id", 2));
+            parameters.Add(myDB.CreateParameter("@Name", "Doe"));
+            parameters.Add(myDB.CreateParameter("@FirstName", "John"));
+            parameters.Add(myDB.CreateParameter("@Actif", 1));
+            myDB.ExecuteNonQuery(sql, parameters);
         }
 
         private static void CreateDatabaseOracle()
         {
-            if (DatabaseAccess.ExecuteScalar<int>("SELECT count(*) FROM user_tables WHERE table_name = 'CONTACTS'") == 1) return;
+            if (myDB.ExecuteScalar<int>("SELECT count(*) FROM user_tables WHERE table_name = 'CONTACTS'") == 1) return;
             List<DbParameter> parameters = new List<DbParameter>();
             //*** Create table and data
             string sql = "CREATE TABLE CONTACTS (ID number(10), NAME varchar2(50), FIRSTNAME varchar2(50), ACTIF number(1))";
-            DatabaseAccess.ExecuteNonQuery(sql);
+            myDB.ExecuteNonQuery(sql);
 
             sql = "INSERT INTO CONTACTS (ID, NAME, FIRSTNAME, ACTIF) VALUES (:Id, :Name, :FirstName, :Actif)";
 
-            parameters.Add(DatabaseAccess.CreateParameter(":Id", 1));
-            parameters.Add(DatabaseAccess.CreateParameter(":Name", "Wayne"));
-            parameters.Add(DatabaseAccess.CreateParameter(":FirstName", "John"));
-            parameters.Add(DatabaseAccess.CreateParameter(":Actif", 0));
-            DatabaseAccess.ExecuteNonQuery(sql, parameters);
+            parameters.Add(myDB.CreateParameter(":Id", 1));
+            parameters.Add(myDB.CreateParameter(":Name", "Wayne"));
+            parameters.Add(myDB.CreateParameter(":FirstName", "John"));
+            parameters.Add(myDB.CreateParameter(":Actif", 0));
+            myDB.ExecuteNonQuery(sql, parameters);
 
             parameters.Clear();
-            parameters.Add(DatabaseAccess.CreateParameter(":Id", 2));
-            parameters.Add(DatabaseAccess.CreateParameter(":Name", "Doe"));
-            parameters.Add(DatabaseAccess.CreateParameter(":FirstName", "John"));
-            parameters.Add(DatabaseAccess.CreateParameter(":Actif", 1));
-            DatabaseAccess.ExecuteNonQuery(sql, parameters);
+            parameters.Add(myDB.CreateParameter(":Id", 2));
+            parameters.Add(myDB.CreateParameter(":Name", "Doe"));
+            parameters.Add(myDB.CreateParameter(":FirstName", "John"));
+            parameters.Add(myDB.CreateParameter(":Actif", 1));
+            myDB.ExecuteNonQuery(sql, parameters);
         }
 
     }
