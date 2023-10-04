@@ -139,6 +139,22 @@ namespace UDBA
         }
 
         /// <summary>
+        /// Open the database connection
+        /// </summary>
+        public void OpenDatabase(ConnectionStringSettings connectionStringSettings)
+        {
+            try
+            {
+                CreateDbConnection(connectionStringSettings);
+                dbConnection.Open();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
         /// Close the database connection
         /// </summary>
         public void CloseDatabase()
