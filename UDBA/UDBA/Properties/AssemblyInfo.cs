@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("UDBA")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Universal DataBase Access : easy access to database")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("UDBA")]
-[assembly: AssemblyCopyright("Copyright ©  2023")]
+[assembly: AssemblyCopyright("Copyright © 2023 Philippe Waty")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
