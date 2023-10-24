@@ -183,6 +183,15 @@ namespace UDBA
         }
 
         /// <summary>
+        /// Returns the current transaction
+        /// </summary>
+        /// <returns></returns>
+        public IDbTransaction GetTransaction()
+        {
+            return dbTransaction;
+        }
+
+        /// <summary>
         /// Rollback a transaction
         /// </summary>
         public void RollbackTransaction()

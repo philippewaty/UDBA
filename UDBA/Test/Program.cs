@@ -65,7 +65,7 @@ namespace Test
             DbDataReader reader = myDB.ExecuteReader("SELECT * FROM CONTACTS");
             while (reader.Read())
             {
-                Console.WriteLine($"Id={reader.Get<int>("Id", 0)}, Name={reader.Get<string>("Name")}, FirstName={reader.Get<string>("FirstName")}, Actif={reader.Get<bool>("Actif")}");
+                Console.WriteLine($"Id={reader.Get<int>("Id", 0)}, Name={reader.Get<string>("Name")}, FirstName={reader.Get<string>("FirstName","")}, Actif={reader.Get<bool>("Actif")}");
                 Console.WriteLine("Avec index de colonne");
                 Console.WriteLine($"Id={reader.Get<int>(0, 0)}, Name={reader.Get<string>(1)}, FirstName={reader.Get<string>(2)}, Actif={reader.Get<bool>(3)}");
             }
@@ -172,6 +172,13 @@ namespace Test
             parameters.Add(myDB.CreateParameter("@Id", 2));
             parameters.Add(myDB.CreateParameter("@Name", "Doe"));
             parameters.Add(myDB.CreateParameter("@FirstName", "John"));
+            parameters.Add(myDB.CreateParameter("@Actif", 1));
+            myDB.ExecuteNonQuery(sql, parameters);
+
+            parameters.Clear();
+            parameters.Add(myDB.CreateParameter("@Id", 3));
+            parameters.Add(myDB.CreateParameter("@Name", "Clint"));
+            parameters.Add(myDB.CreateParameter("@FirstName", null));
             parameters.Add(myDB.CreateParameter("@Actif", 1));
             myDB.ExecuteNonQuery(sql, parameters);
         }
