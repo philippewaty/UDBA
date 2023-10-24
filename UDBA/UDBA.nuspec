@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>    
     <id>UDBA</id>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <title></title>
     <authors>Philippe Waty</authors>
     <owners></owners>
@@ -10,7 +10,11 @@
     <projectUrl>https://github.com/philippewaty/UDBA</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Provides easy access to database.</description>
-    <releaseNotes></releaseNotes>
+    <releaseNotes>Version 1.0.1 (24-10-2023)
+    Added GetTransaction method
+
+Version 1.0.1 (19-10-2023)
+    First version</releaseNotes>
     <copyright>Copyright © Philippe Waty 2023</copyright>
     <tags>database access</tags>
     <summary></summary>

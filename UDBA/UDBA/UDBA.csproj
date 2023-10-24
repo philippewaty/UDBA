@@ -48,6 +48,9 @@
     <Compile Include="Exceptions\DataReaderParseFieldException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="History.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /Y /E /R "$(TargetDir)UDBA.dll" "$(ProjectDir)..\lib\net46\"</PostBuildEvent>

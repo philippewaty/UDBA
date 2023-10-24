@@ -1,0 +1,5 @@
+﻿Version 1.0.1 (24-10-2023)
+    Added GetTransaction method
+
+Version 1.0.1 (19-10-2023)
+    First version
