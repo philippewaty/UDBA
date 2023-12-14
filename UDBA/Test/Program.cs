@@ -82,6 +82,11 @@ namespace Test
             while (reader.Read())
             {
                 Console.WriteLine($"Id={reader.Get<int>("Id", 0)}, Name={reader.Get<string>("Name")}, Actif={reader.Get<bool>("Actif")}");
+                DbDataReader reader2 = myDB.ExecuteReader($"SELECT * FROM CONTACTS WHERE Id = {reader.Get<int>("Id", 0)}");
+                if (reader2.Read()) {
+                    Console.WriteLine($"Reader2 Id={reader2.Get<int>("Id", 0)}, Name={reader2.Get<string>("Name")}, Actif={reader2.Get<bool>("Actif")}");
+                }
+                reader2.Close();
             }
             reader.Close();
 

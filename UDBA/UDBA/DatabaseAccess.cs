@@ -28,11 +28,11 @@ namespace UDBA
 
         #region Properties
 
-        public IDbConnection GetConnection
+        public DbConnection GetConnection
         {
             get
             {
-                return dbConnection;
+                return (DbConnection)dbConnection;
             }
         }
 
