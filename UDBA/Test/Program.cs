@@ -103,10 +103,17 @@ namespace Test
                 Console.WriteLine($"Id={row["Id"]}, Name={row["Name"]}, Actif={row["Actif"]}");
             }
 
+            DataSet dataSet = myDB.GetDataSet($"SELECT * FROM CONTACTS WHERE FirstName = {sqlParameterFormat}FirstName AND Actif = {sqlParameterFormat}Actif", parameters);
+            foreach (DataRow row in dataSet.Tables[0].Rows)
+            {
+                Console.WriteLine($"Id={row["Id"]}, Name={row["Name"]}, Actif={row["Actif"]}");
+            }
+
             if (dataBaseType != DataBaseType.SQLite)
             {
                 myDB.ExecuteNonQuery("DROP TABLE CONTACTS");
             }
+
             myDB.CloseDatabase();
 
             Console.ReadKey();

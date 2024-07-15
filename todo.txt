@@ -1,0 +1,5 @@
+Méthodes
+- List<T>GetEntities()
+- <T>GetEntity
+- Insert<T>
+- Update<T>

@@ -325,5 +325,27 @@ namespace UDBA
         }
 
         #endregion
+
+        #region DataSet
+
+        DbDataAdapter CreateDataAdapter(DbConnection connection)
+        {
+            return DbProviderFactories.GetFactory(connection).CreateDataAdapter();
+        }
+
+        public DataSet GetDataSet(string sql, List<DbParameter> parameters = null, CommandType commandType = CommandType.Text)
+        {
+            DataSet dataSet = new DataSet();
+            DbDataAdapter dataAdapter;
+
+            IDbCommand command = CreateCommand(sql, parameters, commandType);
+            dataAdapter = CreateDataAdapter((DbConnection)dbConnection);
+            dataAdapter.SelectCommand = (DbCommand)command;
+            dataAdapter.Fill(dataSet);
+
+            return dataSet;
+
+        }
+        #endregion
     }
 }

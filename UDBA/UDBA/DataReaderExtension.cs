@@ -125,5 +125,13 @@ namespace UDBA
 
         #endregion
 
+        #region Connection methods
+
+        public static long Count(IDbConnection connection)
+        {
+            return 0;
+        }
+
+        #endregion
     }
 }
