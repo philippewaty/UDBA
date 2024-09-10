@@ -161,7 +161,7 @@ namespace UDBA
         {
             try
             {
-                dbConnection.Close();
+                dbConnection?.Close();
             }
             catch (Exception)
             {
