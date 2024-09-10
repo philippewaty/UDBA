@@ -1,15 +1,16 @@
-﻿<?xml version="1.0"?>
-<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
-  <metadata>    
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
     <id>UDBA</id>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <title></title>
     <authors>Philippe Waty</authors>
     <owners></owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="file">license.txt</license>
     <projectUrl>https://github.com/philippewaty/UDBA</projectUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Provides easy access to database.</description>
+    <summary></summary>
     <releaseNotes>Version 1.0.2 (09-09-2024)
     Correction in CloseDatabase method
 
@@ -20,13 +21,12 @@ Version 1.0.1 (19-10-2023)
     First version</releaseNotes>
     <copyright>Copyright © Philippe Waty 2023</copyright>
     <tags>database access</tags>
-    <summary></summary>
     <dependencies>
       <group targetFramework=".NETFramework4.6" />
     </dependencies>
   </metadata>
   <files>
-        <file src="lib\net46\UDBA.dll" target="lib\net46\UDBA.dll" />
-        <file src="license.txt" target="license.txt" />
+    <file src="lib\net46\UDBA.dll" target="lib\net46\UDBA.dll" />
+    <file src="license.txt" target="license.txt" />
   </files>
 </package>
