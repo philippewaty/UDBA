@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.Common;
-using UDBA.Exceptions;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using UDBA.Exceptions;
 
 namespace UDBA
 {
